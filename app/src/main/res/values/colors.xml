@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="orange">#f44336</color>
+    <color name="orangeDark">#831109</color>
+    <color name="textColor">#353535</color>
+    <color name="greenColor">#4CAF50</color>
+    <color name="redColor">#F44336</color>
+
+    <color name="category1">#8BC34A</color>
+    <color name="category2">#3F51B5</color>
+    <color name="category3">#009688</color>
+    <color name="category4">#FF9800</color>
+    <color name="category5">#2196F3</color>
+    <color name="category6">#9C27B0</color>
+
+</resources>
