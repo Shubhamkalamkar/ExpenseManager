@@ -1,6 +1,7 @@
 package com.shubham.expensemanager.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
+        Log.d("TAG", "onBindViewHolder: "+category.getCategoryName());
         holder.binding.categoryText.setText(category.getCategoryName());
         holder.binding.selectCategoryIcon.setImageResource(category.getCategoryImage());
 

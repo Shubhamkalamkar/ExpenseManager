@@ -21,6 +21,8 @@ import com.shubham.expensemanager.databinding.FragmentAddTransactionBinding;
 import com.shubham.expensemanager.databinding.ListDialogBinding;
 import com.shubham.expensemanager.models.Account;
 import com.shubham.expensemanager.models.Category;
+import com.shubham.expensemanager.utils.Constants;
+import com.shubham.expensemanager.utils.Helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,15 +88,9 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
             ListDialogBinding dialogBinding = ListDialogBinding.inflate(inflater);
             AlertDialog categoryDialog = new AlertDialog.Builder(getContext()).create();
             categoryDialog.setView(dialogBinding.getRoot());
-            ArrayList<Category> categories = new ArrayList<>();
-            categories.add(new Category("Salary",R.drawable.ic_salary, R.color.category1));
-            categories.add(new Category("Buisness",R.drawable.ic_business, R.color.category2));
-            categories.add(new Category("Investment",R.drawable.ic_investment, R.color.category3));
-            categories.add(new Category("Loan",R.drawable.ic_loan, R.color.category4));
-            categories.add(new Category("Rent",R.drawable.ic_rent, R.color.category5));
-            categories.add(new Category("Other",R.drawable.ic_other, R.color.category6));
 
-            CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), categories, new CategoryAdapter.CategoryClickListener() {
+
+            CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), Constants.categories, new CategoryAdapter.CategoryClickListener() {
                 @Override
                 public void onCategoryClicked(Category category) {
                     binding.category.setText(category.getCategoryName());
@@ -126,7 +122,7 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
                 }
             });
             dialogBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//            dialogBinding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
+            dialogBinding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
             dialogBinding.recyclerView.setAdapter(accountAdapter);
 
             accountsDialog.show();

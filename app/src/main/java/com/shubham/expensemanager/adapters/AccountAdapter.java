@@ -1,6 +1,7 @@
 package com.shubham.expensemanager.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Accounts
     @Override
     public void onBindViewHolder(@NonNull AccountsViewHolder holder, int position) {
         Account account = accountArrayList.get(position);
+        Log.d("TAG", "onBindViewHolder: "+account.getAccountName());
         holder.binding.accountName.setText(account.getAccountName());
         holder.itemView.setOnClickListener(c->{
             accountClickListener.onAccountSelected(account);
@@ -46,7 +48,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Accounts
 
     @Override
     public int getItemCount() {
-        return 0;
+        return accountArrayList.size();
     }
 
     public class AccountsViewHolder extends RecyclerView.ViewHolder {
