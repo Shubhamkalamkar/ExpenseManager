@@ -2,11 +2,18 @@ package com.shubham.expensemanager.models;
 
 import java.util.Date;
 
-public class Transaction {
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Transaction extends RealmObject {
     private String type, category, account, note;
     private Date date;
 
     private double amount;
+
+    @PrimaryKey
+    private long id;
 
     public Transaction() {
     }
@@ -77,5 +84,4 @@ public class Transaction {
         this.id = id;
     }
 
-    private long id;
 }
