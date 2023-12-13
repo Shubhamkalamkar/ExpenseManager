@@ -199,5 +199,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        tools:listitem="@layout/row_transaction" />
+        tools:listitem="@layout/row_transaction" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageView
+        android:id="@+id/emptyImg"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:alpha="0.5"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:srcCompat="@drawable/empty_state" />
 </androidx.constraintlayout.widget.ConstraintLayout>

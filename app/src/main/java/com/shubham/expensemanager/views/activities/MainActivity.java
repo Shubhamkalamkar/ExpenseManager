@@ -7,10 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.shubham.expensemanager.adapters.TransactionAdapter;
 import com.shubham.expensemanager.models.Transaction;
 import com.shubham.expensemanager.utils.Constants;
+import com.shubham.expensemanager.utils.Helper;
 import com.shubham.expensemanager.viewmodels.MainViewModel;
 import com.shubham.expensemanager.views.fragments.AddTransactionFragment;
 import com.shubham.expensemanager.R;
@@ -29,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     Calendar calendar;
 
+    int selectedTab = 0; //daily
 
-    MainViewModel mainViewModel;
+    public MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +55,26 @@ public class MainActivity extends AppCompatActivity {
         calendar = Calendar.getInstance();
         updateDate();
 
-        binding.nextDate.setOnClickListener(c->{
-            calendar.add(Calendar.DATE,1);
+        binding.nextDate.setOnClickListener(c -> {
+            if (selectedTab==Constants.DAILY){
+                calendar.add(Calendar.DATE, 1);
+            } else if (selectedTab==Constants.MONTHLY){
+                calendar.add(Calendar.MONTH, 1);
+            }
             updateDate();
         });
 
-        binding.previousDate.setOnClickListener(c->{
-            calendar.add(Calendar.DATE, -1);
+        binding.previousDate.setOnClickListener(c -> {
+            if (selectedTab==Constants.DAILY) {
+                calendar.add(Calendar.DATE, -1);
+            }else if (selectedTab==Constants.MONTHLY){
+                calendar.add(Calendar.MONTH, -1);
+            }
             updateDate();
         });
 
-        binding.floatingActionButton.setOnClickListener(c->{
-            new AddTransactionFragment().show(getSupportFragmentManager(),null);
+        binding.floatingActionButton.setOnClickListener(c -> {
+            new AddTransactionFragment().show(getSupportFragmentManager(), null);
         });
 
 //        ArrayList<Transaction> transactions = new ArrayList<>();
@@ -75,18 +89,49 @@ public class MainActivity extends AppCompatActivity {
 
         binding.transactionList.setLayoutManager(new LinearLayoutManager(this));
 
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Snackbar.make(binding.getRoot(), tab.getText(), Snackbar.LENGTH_LONG).show();
+                if (tab.getText().equals("Monthly")) {
+                    selectedTab = 1;
+                    updateDate();
+                } else if (tab.getText().equals("Daily")) {
+                    selectedTab = 0;
+                    updateDate();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         mainViewModel.transactions.observe(this, new Observer<RealmResults<Transaction>>() {
             @Override
             public void onChanged(RealmResults<Transaction> transactions) {
-                TransactionAdapter transactionAdapter = new TransactionAdapter(MainActivity.this,transactions);
+                TransactionAdapter transactionAdapter = new TransactionAdapter(MainActivity.this, transactions);
                 binding.transactionList.setAdapter(transactionAdapter);
+                if (transactions.size() > 0) {
+
+                    binding.emptyImg.setVisibility(View.GONE);
+
+                } else {
+                    binding.emptyImg.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         mainViewModel.totalIncome.observe(this, new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                binding.totalLabel.setText(String.valueOf(aDouble));
+                binding.incomeLabel.setText(String.valueOf(aDouble));
             }
         });
 
@@ -108,17 +153,25 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.getTransaction(calendar);
     }
 
+    public void getTransaction() {
+        mainViewModel.getTransaction(calendar);
+    }
 
+    void updateDate() {
+        if (selectedTab==0){
+            binding.currentDate.setText(Helper.formatDate(calendar.getTime()));
+        }else {
+            binding.currentDate.setText(Helper.formatDateByMonth(calendar.getTime()));
 
-    void updateDate(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy");
-        binding.currentDate.setText(dateFormat.format(calendar.getTime()));
+        }
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy");
+//        binding.currentDate.setText(dateFormat.format(calendar.getTime()));
         mainViewModel.getTransaction(calendar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu,menu);
+        getMenuInflater().inflate(R.menu.top_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 }

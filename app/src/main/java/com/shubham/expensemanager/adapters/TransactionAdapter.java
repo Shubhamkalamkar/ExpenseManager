@@ -1,6 +1,8 @@
 package com.shubham.expensemanager.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.shubham.expensemanager.models.Category;
 import com.shubham.expensemanager.models.Transaction;
 import com.shubham.expensemanager.utils.Constants;
 import com.shubham.expensemanager.utils.Helper;
+import com.shubham.expensemanager.views.activities.MainActivity;
 
 import java.util.ArrayList;
 
@@ -56,6 +59,29 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
      } else if(transaction.getType().equals(Constants.EXPENSE)) {
          holder.binding.transactionAmount.setTextColor(context.getColor(R.color.redColor));
      }
+
+     holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+         @Override
+         public boolean onLongClick(View v) {
+             AlertDialog deleteDialog = new AlertDialog.Builder(context).create();
+             deleteDialog.setTitle("Delete Transaction");
+             deleteDialog.setMessage("Are you sure to delete");
+             deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialog, int which) {
+                     ((MainActivity)context).mainViewModel.deleteTransaction(transaction);
+                 }
+             });
+             deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialog, int which) {
+                     deleteDialog.dismiss();
+                 }
+             });
+             deleteDialog.show();
+             return false;
+         }
+     });
 
 
     }
